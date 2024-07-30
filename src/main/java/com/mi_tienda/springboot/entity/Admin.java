@@ -12,16 +12,13 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class User {   
+public class Admin {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String username;
-    private String nombre;
-    private String apellido;
     private String email;
     private int telefono;
     private String roles;
     private String password;
-    private String img_user;
 }
