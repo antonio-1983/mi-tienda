@@ -1,28 +1,29 @@
 package com.mi_tienda.springboot.entity;
 
+import com.mi_tienda.springboot.utils.AuthorityName;
 import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinTable;
-import jakarta.persistence.ManyToMany;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Entity
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class Admin {
+@Entity(name="authorities")
+public class Authority {
+    public Authority(AuthorityName authorityName) {
+        this.name = authorityName;
+    }
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String username;
-    private String email;
-    private int telefono;
-    private String password;
-    private String role;
     
+    @Enumerated(EnumType.STRING)
+    private AuthorityName name;
 }
