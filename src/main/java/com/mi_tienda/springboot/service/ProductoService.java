@@ -1,15 +1,22 @@
 package com.mi_tienda.springboot.service;
-
 import com.mi_tienda.springboot.entity.Producto;
 import com.mi_tienda.springboot.repository.ProductoRepository;
 import com.mi_tienda.springboot.service.impl.IProductoService;
 import java.util.List;
 import java.util.Optional;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
+/*
 @Service
 public class ProductoService implements IProductoService{
     ProductoRepository productoRepository;
+*/   
+    @Service
+    public class ProductoService implements IProductoService {
+
+    @Autowired
+    private ProductoRepository productoRepository;
+    
     @Override
     public List<Producto> verProductos(){
         return productoRepository.findAll();
@@ -26,10 +33,6 @@ public class ProductoService implements IProductoService{
     public void eliminarProducto(Long id){
        productoRepository.deleteById(id);
     }
-    
-    
-    
-    
     @Override
     public void editarProducto(Long id,Producto productoDetalles){
 

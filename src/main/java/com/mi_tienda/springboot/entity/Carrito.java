@@ -19,5 +19,5 @@ public class Carrito {
     private Long id;
     private Long id_user;
     private Long id_producto;
-    private Double total;   
+    private Double total;
 }
