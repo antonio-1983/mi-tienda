@@ -1,51 +1,58 @@
 package com.mi_tienda.springboot.service;
 
 import com.mi_tienda.springboot.entity.Carrito;
+import com.mi_tienda.springboot.entity.CarritoItem;
+import com.mi_tienda.springboot.entity.Producto;
+import com.mi_tienda.springboot.repository.CarritoItemRepository;
 import com.mi_tienda.springboot.repository.CarritoRepository;
-import com.mi_tienda.springboot.service.impl.ICarritoService;
-import java.util.List;
-import java.util.Optional;
+import com.mi_tienda.springboot.repository.ProductoRepository;
+import com.mi_tienda.springboot.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Optional;
+
 @Service
-public class CarritoService implements ICarritoService{
-    CarritoRepository carritoRepository;
-    
-    @Override
-    public List<Carrito> verCarritos(){
-        return carritoRepository.findAll();
+public class CarritoService {
+
+    @Autowired
+    private CarritoRepository carritoRepository;
+
+    @Autowired
+    private CarritoItemRepository carritoItemRepository;
+
+    @Autowired
+    private ProductoRepository productoRepository;
+
+    @Autowired
+    private UserRepository userRepository;
+
+    public Carrito obtenerCarritoPorUserId(Long userId) {
+        return carritoRepository.findByUserId(userId).orElse(null);
     }
-    @Override
-    public void crearCarrito(Carrito carrito){
-        carritoRepository.save(carrito);
-    }
-    @Override
-    public void editarCarrito(Long id,Carrito carritoDetalles){
-        
-        Optional<Carrito> optionalCarrito = carritoRepository.findById(id);
-    if (optionalCarrito.isPresent()) {
-        Carrito carritoExistente = optionalCarrito.get();
-        
-        if (carritoDetalles.getId_producto() != null) {
-            carritoExistente.setId_producto(carritoDetalles.getId_producto());
-        }     
-        if (carritoDetalles.getId_user() != 0) {
-            carritoExistente.setId_user(carritoDetalles.getId_user());
+
+    public Carrito agregarProductoAlCarrito(Long userId, Long productoId, int cantidad) {
+        Optional<Carrito> carritoOptional = carritoRepository.findByUserId(userId);
+        Carrito carrito;
+        if (carritoOptional.isEmpty()) {
+            carrito = new Carrito();
+            carrito.setUser(userRepository.findById(userId).orElse(null));
+        } else {
+            carrito = carritoOptional.get();
         }
-        if (carritoDetalles.getTotal() != null) {
-            carritoExistente.setTotal(carritoDetalles.getTotal());
-        }
-            carritoRepository.save(carritoExistente);
-    } else {
-        throw new RuntimeException("Producto no encontrado");
+
+        Producto producto = productoRepository.findById(productoId).orElse(null);
+        CarritoItem item = new CarritoItem();
+        item.setCarrito(carrito);
+        item.setProducto(producto);
+        item.setCantidad(cantidad);
+
+        carrito.getItems().add(item);
+        carritoItemRepository.save(item);
+        return carritoRepository.save(carrito);
     }
-    }
-    @Override
-    public void eliminarCarrito(Long id){
-        carritoRepository.deleteById(id);
-    }
-    @Override
-    public Carrito buscarCarrito(Long id){
-        return carritoRepository.findById(id).orElse(null);
+
+    public void eliminarProductoDelCarrito(Long carritoItemId) {
+        carritoItemRepository.deleteById(carritoItemId);
     }
 }
