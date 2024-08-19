@@ -8,17 +8,14 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
- @Entity
-    @Data
-    @AllArgsConstructor
-    @NoArgsConstructor
-public class Producto {
+@Entity
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+public class Role {
      @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nombre;
-    private Long stock;
-    private String img_producto;
-    private String descripcion;
-    private Double precio;
+
+    private String name;
 }
