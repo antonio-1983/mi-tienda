@@ -30,9 +30,10 @@ public class SecurityConfig {
             .authorizeHttpRequests(authorizeRequests -> 
                 authorizeRequests
                     .requestMatchers("/api/user/hola").hasRole("USER")
+                    .requestMatchers("/api/user/ver").hasRole("ADMIN")
+                    .requestMatchers(HttpMethod.POST, "/api/user/crear").permitAll()
                     .requestMatchers(HttpMethod.GET, "/").permitAll()
                     .requestMatchers("/api/producto/**").permitAll()
-                    //.requestMatchers(HttpMethod.GET, "/api/producto/ver").permitAll()
                     .requestMatchers(HttpMethod.GET, "/api/user/ver").hasAnyRole("ADMIN","USER")
                     .requestMatchers("/api/carrito/**").hasRole("USER")  // Permitir rutas del carrito
                     .anyRequest().authenticated()
